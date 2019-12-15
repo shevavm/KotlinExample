@@ -1,11 +1,8 @@
 package ru.skillbranch.kotlinexample
 
-import android.os.Build
-import androidx.annotation.VisibleForTesting
 import java.math.BigInteger
 import java.security.MessageDigest
 import java.security.SecureRandom
-import javax.security.auth.login.LoginException
 import java.lang.StringBuilder
 import java.lang.IllegalArgumentException
 
@@ -39,9 +36,7 @@ class User (
             _login = value?.toLowerCase()
         }
         get() = _login!!
-    
- 
-}
+
     private val salt: String by lazy {
         ByteArray(16).also {SecureRandom().nextBytes(it)}
     }
