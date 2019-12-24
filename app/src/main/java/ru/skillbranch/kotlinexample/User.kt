@@ -4,7 +4,7 @@ import androidx.annotation.VisibleForTesting
 import java.math.BigInteger
 import java.security.MessageDigest
 import java.security.SecureRandom
-
+//подчишенные баги
 class User private constructor(
     private val firstName: String,
     private val lastName: String?,

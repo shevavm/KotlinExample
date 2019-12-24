@@ -1,5 +1,5 @@
 package ru.skillbranch.kotlinexample.extensions
-
+//подчишенные баги
 fun <T> List<T>.dropLastUntil(predicate: (T) -> Boolean): List<T> {
     if (!isNotEmpty()) {
         val iterator = listIterator(this.size)

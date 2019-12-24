@@ -2,7 +2,7 @@ package ru.skillbranch.kotlinexample
 
 import ru.skillbranch.kotlinexample.extensions.isValidPhone
 import ru.skillbranch.kotlinexample.extensions.trimPhone
-
+//подчишенные баги
 
 object UserHolder {
     private val map = mutableMapOf<String, User>()
