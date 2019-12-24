@@ -1,23 +1,23 @@
 package ru.skillbranch.kotlinexample
 
+import ru.skillbranch.kotlinexample.extensions.isValidPhone
+import ru.skillbranch.kotlinexample.extensions.trimPhone
+
+
 object UserHolder {
     private val map = mutableMapOf<String, User>()
 
-    fun registerUser(
-        fullName: String,
-        email: String,
-        password: String
-    ): User {
-        return map[email.toLowerCase().trim()]?.let {
-            throw IllegalArgumentException("A user with this email already exists")
-        } ?: User.makeUser(
-            fullName,
-            email = email,
-            password = password
-        ).also { user -> map[user.login] = user }
+    fun registerUser(fullName: String, email: String, password: String): User {
+        val user = User.makeUser(fullName, email = email, password = password)
+        return if (!map.keys.contains(user.login)) {
+            user.also { user -> map[user.login] = user }
+        } else throw IllegalArgumentException("A user with this email already exists")
     }
 
     fun loginUser(login: String, password: String): String? {
+        val trimLogin = if (login.trimPhone().isValidPhone()) login.trimPhone()
+        else login.trim().toLowerCase()
+
         return map[login.trim()]?.run {
             if (checkPassword(password)) this.userInfo
             else null
@@ -47,7 +47,7 @@ object UserHolder {
         list.map {
             val (fullName, email, access, phone) = it.split(";")
             val cuser = User.makeImportUser(fullName, email, access, phone)
-                .also { user -> map[user.login] = user }
+                ?.also {user -> map[user.login] = user}
             cuser
         }.filterNotNull()
 
