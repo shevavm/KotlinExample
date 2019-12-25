@@ -5,6 +5,37 @@ import java.math.BigInteger
 import java.security.MessageDigest
 import java.security.SecureRandom
 //подчишенные баги
+/*
+* class User должен иметь приватный primary constructor со следующими аргументами:
+val firstName: String,
+val lastName: String?,
+email: String? = null,
+rawPhone: String? = null,
+meta: Map<String, Any>? = null
+class User должен минимально иметь следующие свойства:
+val firstName: String,
+val lastName: String?,
+val userInfo: String,
+val fullName: String,
+val initials: String,
+var phone: String?
+var login: String,
+val salt: String,
+var passwordHash: String,
+var accessCode: String? //@VisibleForTesting(otherwise = VisibleForTesting.NONE)
+Cвойство userInfo должно быть представлено следующим содержимым:
+userInfo = """
+      firstName: $firstName
+      lastName: $lastName
+      login: $login
+      fullName: $fullName
+      initials: $initials
+      email: $email
+      phone: $phone
+      meta: $meta
+    """.trimIndent()
+
+* */
 class User private constructor(
     private val firstName: String,
     private val lastName: String?,
@@ -125,7 +156,7 @@ class User private constructor(
         return hexString.padStart(32, '0')
     }
 
-    fun generateAccessCode(): String{
+    fun generateAccessCode(): String {
         val possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890"
         return StringBuilder().apply{
             repeat(6){
@@ -166,6 +197,9 @@ class User private constructor(
                         }
                     }
         }
+
+        fun makeImportUser(fullName: String, email: String, access: String, phone: String): Any =
+            Unit
 
     }
 
