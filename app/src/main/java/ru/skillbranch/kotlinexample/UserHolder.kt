@@ -1,3 +1,5 @@
+@file:Suppress("Annotator")
+
 package ru.skillbranch.kotlinexample
 
 import ru.skillbranch.kotlinexample.extensions.isValidPhone
@@ -43,11 +45,10 @@ object UserHolder {
 * указанный при регистрации методом registerUser) или возвращающий null
 * если пользователь с указанным логином и паролем не найден (или неверный пароль)*/
     fun loginUser(login: String, password: String): String? {
-        return if (login.contains("@")) {
-            map[login.trim()]?.let { user ->
-                if (user.checkPassword(password)) user.userInfo
-                else null
-            }
+        return when (login.contains("@")) {
+            this.map[login.trim()]?.let -> (it.checkPassword(password)) it.userInfo
+            else null
+
         }
     }
 
@@ -92,12 +93,7 @@ object UserHolder {
         val users = mutableListOf<User>()
         list.forEach { string ->
             val userFields = string.split(";")
-            val user = User.makeUserFromImport(
-                fullName = userFields[0].trim(),
-                email = userFields[1].ifEmpty { null },
-                passwordInfo = userFields[2].ifEmpty { null },
-                phone = userFields[3].ifEmpty { null }
-            )
+            val user = User.makeImportUser(fullName = userFields[0].trim(), email = userFields[1].ifEmpty { null }, passwordInfo = userFields[2].ifEmpty { null }, phone = userFields[3].ifEmpty { null })
             map[user.login] = user
             users.add(user)
         }

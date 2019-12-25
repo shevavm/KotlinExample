@@ -198,7 +198,13 @@ class User private constructor(
                     }
         }
 
-        fun makeImportUser(fullName: String, email: String, access: String, phone: String): Any =
+        fun makeImportUser(
+            fullName: String,
+            email: String,
+            access: String,
+            phone: String,
+            passwordInfo: String?
+        ): Any =
             Unit
 
     }
