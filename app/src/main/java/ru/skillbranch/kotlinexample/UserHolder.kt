@@ -44,11 +44,10 @@ object UserHolder {
 * пароль соответственно accessCode или password
 * указанный при регистрации методом registerUser) или возвращающий null
 * если пользователь с указанным логином и паролем не найден (или неверный пароль)*/
-    fun loginUser(login: String, password: String): String? {
-        return when (login.contains("@")) {
-            this.map[login.trim()]?.let -> (it.checkPassword(password)) it.userInfo
+    fun loginUser(login:String, password: String): String? {
+        return map[login.trim()]?.run{
+            if (checkPassword(password)) this.userInfo
             else null
-
         }
     }
 
