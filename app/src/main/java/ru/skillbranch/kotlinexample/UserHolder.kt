@@ -1,15 +1,17 @@
-@file:Suppress("Annotator")
-
 package ru.skillbranch.kotlinexample
 
 import ru.skillbranch.kotlinexample.extensions.isValidPhone
 import ru.skillbranch.kotlinexample.extensions.trimPhone
 //подчишенные баги
 
+
 //Необходимо реализовать метод объекта (object UserHolder) для регистрации пользователя
 object UserHolder {
     private val map = mutableMapOf<String, User >()
-/*
+    private val Any.login: Unit
+        get() = Unit
+
+    /*
 * 1)Реализуй метод registerUser(fullName: String, email: String, password: String)
 * возвращающий объект User,
 * если пользователь с таким же логином уже есть в системе
@@ -24,11 +26,13 @@ object UserHolder {
     //Необходимо реализовать метод объекта (object UserHolder) для регистрации пользователя через телефон
     /*
     * 2)Реализуй метод registerUserByPhone(fullName: String, rawPhone: String)
-    * возвращающий объект User (объект User должен содержать поле accessCode с 6 значным значением состоящим из случайных строчных и прописных букв латинского алфавита и цифр от 0 до 9),
+    * возвращающий объект User (объект User должен содержать поле accessCode с 6 значным значением
+    * состоящим из случайных строчных и прописных букв латинского алфавита и цифр от 0 до 9),
     *  если пользователь с таким же телефоном уже есть в системе
     * необходимо бросить ошибку IllegalArgumentException("A user with this phone already exists")
     * валидным является любой номер телефона содержащий первым символом + и 11 цифр и не содержащий буквы,
-    * иначе необходимо бросить исключение IllegalArgumentException("Enter a valid phone number starting with a + and containing 11 digits")*/
+    * иначе необходимо бросить исключение IllegalArgumentException("Enter a valid phone number starting with a +
+    * and containing 11 digits")*/
     fun registerUserByPhone(fullName: String, rawPhone: String): User {
         if (!rawPhone.trimPhone().isValidPhone()) throw IllegalArgumentException("Enter a valid phone number starting with a + and containing 11 digits")
 
@@ -54,18 +58,21 @@ object UserHolder {
 
  /* Необходимо реализовать метод объекта (object UserHolder) для запроса нового кода
  * авторизации пользователя по номеру телефона +1
-* Реализуй метод requestAccessCode(login: String) : Unit, после выполнения данного метода у пользователя с соответствующим логином должен быть сгенерирован новый код авторизации и помещен в свойство accessCode, соответственно должен измениться и хеш пароля пользователя (вызов метода loginUser должен отрабатывать корректно)
+* Реализуй метод requestAccessCode(login: String) : Unit,
+* после выполнения данного метода у пользователя с соответствующим логином
+* должен быть сгенерирован новый код авторизации и помещен в свойство accessCode,
+* соответственно должен измениться и хеш пароля пользователя (вызов метода loginUser должен отрабатывать корректно)
 */
     fun requestAccessCode(login: String) {
-        if(map.contains(login.trimPhone())) {
-            map[login.trimPhone()]?.apply {
-                val code = generateAccessCode()
-                passwordHash = encrypt (code)
-                accessCode = code
-            }!!.also { map[login]=it }
-
-        }
-
+        val user =
+            map[login.trim().toLowerCase()] ?: map[login.trim().replace("[^+\\d]".toRegex(), "")]
+            ?: return
+        user.generateAccessCode()
+    }
+    /*
+    * очистка мапа */
+    fun clearHolder() {
+        map.clear()
     }
 /* Необходимо реализовать метод объекта (object UserHolder) для импорта пользователей из списка строк +3
 * Реализуй метод importUsers(list: List): List,
@@ -92,11 +99,18 @@ object UserHolder {
         val users = mutableListOf<User>()
         list.forEach { string ->
             val userFields = string.split(";")
-            val user = User.makeImportUser(fullName = userFields[0].trim(), email = userFields[1].ifEmpty { null }, passwordInfo = userFields[2].ifEmpty { null }, phone = userFields[3].ifEmpty { null })
+            val user = User.makeImportUser(fullName = userFields[0].trim(), email = userFields[1].ifEmpty { null }!!, passwordInfo = userFields[2].ifEmpty { null }, phone = userFields[3].ifEmpty { null }!!)
             map[user.login] = user
             users.add(user)
         }
         return users
     }
+    private fun <E> MutableList<E>.add(element: Any) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+    private fun Any.makeImportUser(fullName: String, email: String, passwordInfo: String?, phone: String) {
 
+    }
 }
+
+
