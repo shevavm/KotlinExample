@@ -1,5 +1,6 @@
 package ru.skillbranch.kotlinexample
 
+import androidx.annotation.VisibleForTesting
 import ru.skillbranch.kotlinexample.extensions.isValidPhone
 import ru.skillbranch.kotlinexample.extensions.trimPhone
 //подчишенные баги
@@ -8,8 +9,8 @@ import ru.skillbranch.kotlinexample.extensions.trimPhone
 //Необходимо реализовать метод объекта (object UserHolder) для регистрации пользователя
 object UserHolder {
     private val map = mutableMapOf<String, User >()
-    private val Any.login: Unit
-        get() = Unit
+    /*private val Any.login: Unit
+        get() = Unit*/
 
     /*
 * 1)Реализуй метод registerUser(fullName: String, email: String, password: String)
@@ -71,9 +72,10 @@ object UserHolder {
     }
     /*
     * очистка мапа */
-    fun clearHolder() {
-        map.clear()
-    }
+    @VisibleForTesting(otherwise = VisibleForTesting.NONE)
+            fun clearHolder(){
+                map.clear()
+            }
 /* Необходимо реализовать метод объекта (object UserHolder) для импорта пользователей из списка строк +3
 * Реализуй метод importUsers(list: List): List,
 * в качестве аргумента принимает список строк
@@ -95,7 +97,7 @@ object UserHolder {
 * meta: {src=csv}
 * ), при этом meta должно содержать "src" : "csv", если сзначение в csv строке пустое то соответствующее свойство в объекте User должно быть null, обратите внимание что salt и hash пароля в csv разделены ":" , после импорта пользователей вызов метода loginUser должен отрабатывать корректно (достаточно по логину паролю)
 */
-    fun importUsers(list: List<String>): List<User> {
+   /* fun importUsers(list: List<String>): List<User> {
         val users = mutableListOf<User>()
         list.forEach { string ->
             val userFields = string.split(";")
@@ -104,13 +106,13 @@ object UserHolder {
             users.add(user)
         }
         return users
-    }
-    private fun <E> MutableList<E>.add(element: Any) {
+    }*/
+    /*private fun <E> MutableList<E>.add(element: Any) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
     private fun Any.makeImportUser(fullName: String, email: String, passwordInfo: String?, phone: String) {
 
-    }
+    }*/
 }
 
 
