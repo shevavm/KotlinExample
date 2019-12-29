@@ -112,10 +112,19 @@ class User private constructor(
         println("secondary phone constructor")
         val code = generateAccessCode()
         passwordHash = encrypt(code)
-        accessCode = code
+        this.accessCode = code
         sendAccessCodeToUser(rawPhone, code)
 
     }
+    /*constructor(
+        firstName: String,
+        lastName: String?,
+        rawPhone: String
+    ) : this(firstName, lastName, rawPhone = rawPhone, meta = mapOf("auth" to "sms")) {
+        generateAccessCode()
+        if(accessCode != null) sendAccessCodeToUser(rawPhone, accessCode!!)
+
+    }*/
 
     //for csv
     constructor(
@@ -204,12 +213,12 @@ class User private constructor(
                 }
         }
 
-        fun makeImportUser(
+        /*fun makeImportUser(
             fullName: String,
             email: String,
             access: String,
             phone: String,
             passwordInfo: String?
-        ): User = User("stub", "stub", "stub")
+        ): User = User("stub", "stub", "stub")*/
     }
 }

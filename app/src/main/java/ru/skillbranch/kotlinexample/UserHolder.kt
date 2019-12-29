@@ -12,7 +12,7 @@ object UserHolder {
     /*private val Any.login: Unit
         get() = Unit*/
 
-    /*
+    /*Регистрация пользователя через Email и пароль
 * 1)Реализуй метод registerUser(fullName: String, email: String, password: String)
 * возвращающий объект User,
 * если пользователь с таким же логином уже есть в системе
@@ -24,8 +24,9 @@ object UserHolder {
         } else throw IllegalArgumentException("A user with this email already exists")
     }
 
-    //Необходимо реализовать метод объекта (object UserHolder) для регистрации пользователя через телефон
-    /*
+    //Необходимо реализовать метод объекта (object UserHolder)
+    // для регистрации пользователя через телефон
+    /*Регистрация пользователя через номер телефона
     * 2)Реализуй метод registerUserByPhone(fullName: String, rawPhone: String)
     * возвращающий объект User (объект User должен содержать поле accessCode с 6 значным значением
     * состоящим из случайных строчных и прописных букв латинского алфавита и цифр от 0 до 9),
@@ -43,32 +44,44 @@ object UserHolder {
     }
 
 /*
+* Авторизация пользователя
 * 3)Реализуй метод loginUser(login: String, password: String) : String
 * возвращающий поле userInfo пользователя с соответствующим логином и паролем
 * (логин для пользователя phone или email,
 * пароль соответственно accessCode или password
 * указанный при регистрации методом registerUser) или возвращающий null
 * если пользователь с указанным логином и паролем не найден (или неверный пароль)*/
-    fun loginUser(login:String, password: String): String? {
+    /*fun loginUser(login:String, password: String): String? {
         return map[login.trim()]?.run{
+            if (checkPassword(password)) this.userInfo
+            else null
+        }
+    }*/
+    fun loginUser (login:String, password:String) : String? {
+        return map[login.trim().replace("[ ()-]".toRegex(), "")]?.run {
             if (checkPassword(password)) this.userInfo
             else null
         }
     }
 
 
- /* Необходимо реализовать метод объекта (object UserHolder) для запроса нового кода
- * авторизации пользователя по номеру телефона +1
+ /* 4) Необходимо реализовать метод объекта (object UserHolder) для запроса нового кода
+ * авторизации пользователя по номеру телефона
 * Реализуй метод requestAccessCode(login: String) : Unit,
 * после выполнения данного метода у пользователя с соответствующим логином
 * должен быть сгенерирован новый код авторизации и помещен в свойство accessCode,
 * соответственно должен измениться и хеш пароля пользователя (вызов метода loginUser должен отрабатывать корректно)
 */
-    fun requestAccessCode(login: String) {
+    /*fun requestAccessCode(login: String) {
         val user =
             map[login.trim().toLowerCase()] ?: map[login.trim().replace("[^+\\d]".toRegex(), "")]
             ?: return
         user.generateAccessCode()
+    }*/
+    fun requestAccessCode(login: String) {
+        map[login.trim().replace("[ ()-]".toRegex(), "")]?.run {
+            this.changePassword(this.accessCode!!, this.generateAccessCode())
+        }
     }
     /*
     * очистка мапа */
@@ -107,12 +120,7 @@ object UserHolder {
         }
         return users
     }*/
-    /*private fun <E> MutableList<E>.add(element: Any) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-    private fun Any.makeImportUser(fullName: String, email: String, passwordInfo: String?, phone: String) {
 
-    }*/
 }
 
 
