@@ -3,15 +3,11 @@ package ru.skillbranch.kotlinexample
 import androidx.annotation.VisibleForTesting
 import ru.skillbranch.kotlinexample.extensions.isValidPhone
 import ru.skillbranch.kotlinexample.extensions.trimPhone
+
 //подчишенные баги
-
-
 //Необходимо реализовать метод объекта (object UserHolder) для регистрации пользователя
 object UserHolder {
     private val map = mutableMapOf<String, User >()
-    /*private val Any.login: Unit
-        get() = Unit*/
-
     /*Регистрация пользователя через Email и пароль
 * 1)Реализуй метод registerUser(fullName: String, email: String, password: String)
 * возвращающий объект User,
@@ -23,7 +19,6 @@ object UserHolder {
             user.also { user -> map[user.login] = user }
         } else throw IllegalArgumentException("A user with this email already exists")
     }
-
     //Необходимо реализовать метод объекта (object UserHolder)
     // для регистрации пользователя через телефон
     /*Регистрация пользователя через номер телефона
@@ -42,7 +37,6 @@ object UserHolder {
             User.makeUser(fullName, phone = rawPhone).also { user -> map[user.login] = user }
         } else throw IllegalArgumentException("A user with this phone already exists")
     }
-
 /*
 * Авторизация пользователя
 * 3)Реализуй метод loginUser(login: String, password: String) : String
@@ -63,26 +57,22 @@ object UserHolder {
             else null
         }
     }
-
-
  /* 4) Необходимо реализовать метод объекта (object UserHolder) для запроса нового кода
  * авторизации пользователя по номеру телефона
-* Реализуй метод requestAccessCode(login: String) : Unit,
-* после выполнения данного метода у пользователя с соответствующим логином
-* должен быть сгенерирован новый код авторизации и помещен в свойство accessCode,
-* соответственно должен измениться и хеш пароля пользователя (вызов метода loginUser должен отрабатывать корректно)
-*/
-    /*fun requestAccessCode(login: String) {
-        val user =
-            map[login.trim().toLowerCase()] ?: map[login.trim().replace("[^+\\d]".toRegex(), "")]
-            ?: return
-        user.generateAccessCode()
-    }*/
-    fun requestAccessCode(login: String) {
-        map[login.trim().replace("[ ()-]".toRegex(), "")]?.run {
-            this.changePassword(this.accessCode!!, this.generateAccessCode())
-        }
+ * Реализуй метод requestAccessCode(login: String) : Unit,
+ * после выполнения данного метода у пользователя с соответствующим логином
+ * должен быть сгенерирован новый код авторизации и помещен в свойство accessCode,
+ * соответственно должен измениться и хеш пароля пользователя
+ * (вызов метода loginUser должен отрабатывать корректно)
+ * должен быть сгенерирован новый код авторизации и помещен в свойство accessCode,
+ */
+    fun requestAccessCode(phone: String) {
+        val user = map[phone.trim().replace("[^+\\d]".toRegex(), "")]
+        val oldPassword = user?.accessCode ?: ""
+        user?.accessCode = user?.generateAccessCode()
+        user?.changePassword( oldPassword, user.accessCode!!)
     }
+
     /*
     * очистка мапа */
     @VisibleForTesting(otherwise = VisibleForTesting.NONE)
@@ -122,5 +112,7 @@ object UserHolder {
     }*/
 
 }
+
+
 
 

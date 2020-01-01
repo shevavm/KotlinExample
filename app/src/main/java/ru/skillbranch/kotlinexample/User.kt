@@ -43,7 +43,6 @@ class User private constructor(
     rawPhone: String? = null,
     meta: Map<String, Any>? = null
 ) {
-
     val userInfo: String
     private val fullName: String
         get() = listOfNotNull(firstName, lastName)
@@ -112,19 +111,10 @@ class User private constructor(
         println("secondary phone constructor")
         val code = generateAccessCode()
         passwordHash = encrypt(code)
-        this.accessCode = code
+        accessCode = code
         sendAccessCodeToUser(rawPhone, code)
 
     }
-    /*constructor(
-        firstName: String,
-        lastName: String?,
-        rawPhone: String
-    ) : this(firstName, lastName, rawPhone = rawPhone, meta = mapOf("auth" to "sms")) {
-        generateAccessCode()
-        if(accessCode != null) sendAccessCodeToUser(rawPhone, accessCode!!)
-
-    }*/
 
     //for csv
     constructor(
@@ -146,13 +136,9 @@ class User private constructor(
         else throw IllegalArgumentException("The entered password does not match the current password")
     }
 
-    private fun sendAccessCodeToUser(phone: String?, code: String) {
-        println("..... sending access code: $code on $phone")
-    }
-
     private fun encrypt(password: String): String  = salt.plus(password).md5()
     private fun String.md5() : String {
-        val md=MessageDigest.getInstance("MD5")
+        val md= MessageDigest.getInstance("MD5")
         val digest = md.digest(toByteArray())// 16 byte
         val hexString = BigInteger(1, digest).toString(16) // возвращает 32 символа (16 байт в hex)
         return hexString.padStart(32, '0')
@@ -167,6 +153,9 @@ class User private constructor(
                 }
             }
         }.toString()
+    }
+    private fun sendAccessCodeToUser(phone: String?, code: String) {
+        println("..... sending access code: $code on $phone")
     }
 
     companion object Factory {
@@ -201,9 +190,8 @@ class User private constructor(
         }
 
         private fun String.fullNameToPair(): Pair<String, String?> {
-            return this.split(" ").filter {
-                it.isNotBlank()
-            }
+            return this.split(" ")
+                .filter {it.isNotBlank()}
                 .run {
                     when (size) {
                         1 -> first() to null// only one word
@@ -221,4 +209,6 @@ class User private constructor(
             passwordInfo: String?
         ): User = User("stub", "stub", "stub")*/
     }
+
+
 }
